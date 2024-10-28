@@ -1,12 +1,16 @@
 import React from 'react'
-import PizzaForm from './PizzaForm'
 import OrderList from './OrderList'
+import PizzaForm from './PizzaForm'
 
-export default function App() {
+function App() {
   return (
+    
     <div id="app">
       <PizzaForm />
       <OrderList />
     </div>
+   
   )
 }
+
+export default App;
