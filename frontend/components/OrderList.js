@@ -8,8 +8,8 @@ export default function OrderList() {
   const dispatch = useDispatch();
   const sizeFilter = useSelector((state) => state.sizeFilter);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading orders</div>;
+  // if (isLoading) return <div>Loading...</div>;
+  // if (error) return <div>Error loading orders</div>;
 
   // Filter orders based on size
   const filteredOrders = sizeFilter === 'All' ? orders : orders.filter(order => order.size === sizeFilter);
@@ -22,7 +22,7 @@ export default function OrderList() {
           filteredOrders.map((order) => (
             <li key={order.id}>  
               <div>
-                <p>{order.customer} ordered a size {order.size} with {Array.isArray(order.toppings) ? order.toppings.length : 0} toppings</p>  
+                <p>{order.customer} ordered a size {order.size} with {Array.isArray(order.toppings) && order.toppings.length > 0 ? `${order.toppings.length} toppings` : 'no toppings'}</p>  
               </div>
             </li>
           ))

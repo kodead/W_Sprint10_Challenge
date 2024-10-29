@@ -13,8 +13,12 @@ export default function PizzaForm() {
     console.log('Redux state before submit:', ordersState);
   
     // Validate fullName and size
-    if (!ordersState.fullName || !ordersState.size) {
-      alert('Full Name and Size are Required.');
+    if (!ordersState.size) {
+      alert('size must be one of the following values: S, M, L');
+      return
+    }
+    if (!ordersState.fullName) {
+      alert(' fullName is required.');
       return;
     }
   
