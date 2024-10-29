@@ -6,40 +6,40 @@ import { setField, setTopping, resetForm } from '../state/ordersSlice';
 export default function PizzaForm() {
   const dispatch = useDispatch();
   const ordersState = useSelector((state) => state.orders);  
-  const [createOrder, { isLoading, isError, isSuccess }] = useCreateOrderMutation();
-
+  const [createOrder, { isLoading, isError, isSuccess, error }] = useCreateOrderMutation();
+  console.log(error)
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Redux state before submit:', ordersState);
-  
     // Validate fullName and size
-    if (!ordersState.size) {
-      alert('size must be one of the following values: S, M, L');
-      return
-    }
-    if (!ordersState.fullName) {
-      alert(' fullName is required.');
-      return;
-    }
-  
-    // Collect selected toppings as an array of topping IDs
-    const selectedToppings = Object.keys(ordersState.toppings)
-      .filter((key) => ordersState.toppings[key]); // Keep the topping IDs (e.g., '1', '2')
-  
-    try {
-      // Create the order using the selectedToppings (array of IDs)
-      await createOrder({
-        fullName: ordersState.fullName,
-        size: ordersState.size,
-        toppings: selectedToppings,  // Send IDs, not names
-      });
-      dispatch(resetForm());  // Reset form after successful submission
-    } catch (error) {
-      console.error('Order failed: ', error);
-      if (error?.data?.message) {
-        alert(error.data.message);
-      }
-    }
+    // if (!ordersState.size) {
+      //   alert('size must be one of the following values: S, M, L');
+      //   return
+      // }
+      // if (!ordersState.fullName) {
+        //   alert(' fullName is required.');
+        //   return;
+        // }
+        
+        // Collect selected toppings as an array of topping IDs
+        const selectedToppings = Object.keys(ordersState.toppings)
+        .filter((key) => ordersState.toppings[key]); // Keep the topping IDs (e.g., '1', '2')
+        
+        try {
+          // Create the order using the selectedToppings (array of IDs)
+          await createOrder({
+            fullName: ordersState.fullName,
+            size: ordersState.size,
+            toppings: selectedToppings,  // Send IDs, not names
+          });
+          dispatch(resetForm());  // Reset form after successful submission
+        } catch (error) {
+          console.log(error);
+          if (error?.data?.message) {
+            alert(error.data.message);
+          }
+          console.log(error.message)
+        }
   };
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
@@ -86,11 +86,12 @@ export default function PizzaForm() {
     dispatch(setTopping({ field: name, value: checked }));  // Dispatch to setTopping in Redux
   };
 
+
   return (
     <form onSubmit={handleSubmit}>
       <h2>Pizza Form</h2>
       {isLoading && <div className='pending'>Order in progress...</div>}
-      {isError && <div className='failure'>Order failed: fullName is required</div>}
+      {isError && <div className='failure'>{error.data.message}</div>}
       {isSuccess && <div className='success'>Order placed Successfully!</div>}
 
       <div className="input-group">
